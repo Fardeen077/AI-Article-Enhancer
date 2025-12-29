@@ -1,7 +1,7 @@
-import { Article } from "../model/article.model";
-import ApiResponse from "../utils/ApiResponse";
-import ApiError from "../utils/ApiError";
-import { generateWithAi } from "../services/gemini.service.js";
+import { Article } from "../model/article.model.js";
+import ApiResponse from "../utils/ApiResponse.js";
+import ApiError from "../utils/ApiError.js";
+import { generateWithAI } from "../services/gemini.service.js";
 
 const createArticle = async (req, res) => {
     try {
@@ -10,7 +10,7 @@ const createArticle = async (req, res) => {
             throw new ApiError(400, "All fields are required");
         }
 
-        const newArticle = await Article.craete({ title, sourceUrl, originalContent });
+        const newArticle = await Article.create({ title, sourceUrl, originalContent });
         return res.status(201).json(new ApiResponse(201,
             newArticle,
             "Article created successfully"
@@ -81,6 +81,9 @@ const enhanceArticleWithAI = async (req, res) => {
                 "Article already enhanced"
             ));
         }
+        if (!article.originalContent?.trim()) {
+            throw new ApiError(400, "Original content is empty");
+        }
         const prompt = `
         Enhance the following article:
          - Improve grammar
@@ -89,7 +92,7 @@ const enhanceArticleWithAI = async (req, res) => {
          - Do not add false information
          Article:${article.originalContent}`;
 
-        const aiContent = await generateWithAi(prompt);
+        const aiContent = await generateWithAI(prompt);
         if (!aiContent) {
             throw new ApiError(500, "AI did not return content");
         }
