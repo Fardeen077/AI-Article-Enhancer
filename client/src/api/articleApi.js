@@ -16,13 +16,13 @@ const getArticleByIdApi = async (id) => {
 };
 
 const enhanceArticleWithAIApi = async (id) => {
-    const res = await axiosInstance(`/${id}/enhance`);
+    const res = await axiosInstance.post(`/${id}/enhance`);
     return res.data;
-}
+};
 
 export {
     createArticleApi,
     getAllArticlesApi,
     getArticleByIdApi,
     enhanceArticleWithAIApi
-}
+};
