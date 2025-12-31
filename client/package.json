@@ -10,19 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
     "@tailwindcss/vite": "^4.1.18",
-=======
->>>>>>> e7d242a5046fea1bac6e50989c6b1a9474cadb60
     "axios": "^1.13.2",
     "lucide-react": "^0.562.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.11.0",
-<<<<<<< HEAD
     "tailwindcss": "^4.1.18",
-=======
->>>>>>> e7d242a5046fea1bac6e50989c6b1a9474cadb60
     "zustand": "^5.0.9"
   },
   "devDependencies": {

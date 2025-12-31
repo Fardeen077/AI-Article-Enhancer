@@ -7,7 +7,7 @@ import {
     enhanceArticleWithAIApi
 } from "../api/articleApi";
 
-export const useArticleStore = create((set) => ({
+export const useArticleStore = create((set, get) => ({
     isLoading: false,
     articles: [],
     currentArticle: null,
@@ -16,11 +16,11 @@ export const useArticleStore = create((set) => ({
         set({ isLoading: true });
         try {
             const res = await createArticleApi(userData);
-            set({ article: res.data, isLoading: false });
+            set({ articles: [res.data, ...get().articles], isLoading: false });
             toast.success("Article created successfully");
         } catch (error) {
             set({ isLoading: false });
-            toast.error(error?.message?.data?.message || "Failed to create article");
+            toast.error(error?.response?.data?.message || "Failed to create article");
         }
     },
 
@@ -28,11 +28,10 @@ export const useArticleStore = create((set) => ({
         set({ isLoading: true });
         try {
             const res = await getAllArticlesApi();
-            set({ articles: res.data, isLoading: false });
-            toast.success("Article fetched successfully");
+            set({ articles: res.data || [], isLoading: false });
         } catch (error) {
             set({ isLoading: false });
-            toast.error(error?.message?.data?.message || "Failed to fetch articles");
+            console.error(error?.response?.data?.message || "Failed to fetch articles");
         }
     },
 
@@ -41,10 +40,9 @@ export const useArticleStore = create((set) => ({
         try {
             const res = await getArticleByIdApi(id);
             set({ currentArticle: res.data, isLoading: false });
-            toast.success("Article loaded successfully");
         } catch (error) {
             set({ isLoading: false });
-            toast.error(error?.message?.data?.message || "Failed to fetch article");
+            toast.error(error?.response?.data?.message || "Failed to fetch article");
         }
     },
 
@@ -52,11 +50,15 @@ export const useArticleStore = create((set) => ({
         set({ isLoading: true });
         try {
             const res = await enhanceArticleWithAIApi(id);
-            set({ currentArticle: res.data, isLoading: false });
+            set({
+                currentArticle: res.data,
+                articles: get().articles.map((article) => article._id === id ? res.data : article),
+                isLoading: false
+            });
             toast.success("AI enhance article successfully");
         } catch (error) {
             set({ isLoading: false });
-            toast.error(error?.message?.data?.message || "Failed to enhance article");
+            toast.error(error?.response?.data?.message || "Failed to enhance article");
         }
     },
 

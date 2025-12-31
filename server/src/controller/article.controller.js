@@ -85,12 +85,18 @@ const enhanceArticleWithAI = async (req, res) => {
             throw new ApiError(400, "Original content is empty");
         }
         const prompt = `
-        Enhance the following article:
-         - Improve grammar
-         - Improve clarity
-         - Keep original meaning
-         - Do not add false information
-         Article:${article.originalContent}`;
+Rewrite the following article in clear, professional English.
+
+Rules:
+- Return ONLY the rewritten article
+- Do NOT include options, explanations, headings, or quotes
+- Do NOT use markdown
+- Keep it as a single paragraph
+- Expand the content slightly for better readability
+- Use professional journalistic tone
+- Preserve original meaning but add depth where appropriate
+
+Article::${article.originalContent}`;
 
         const aiContent = await generateWithAI(prompt);
         if (!aiContent) {
