@@ -5,7 +5,7 @@ import articleRoutes from "./route/article.route.js";
 const app = express();
 
 app.use(cors({
-  origin:process.env.CLIENT_SERVER_URL || "*",
+  origin:process.env.CLIENT_SERVER_URL,
   credentials: true,
 }));
 app.use(express.json());
